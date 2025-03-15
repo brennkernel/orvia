@@ -1,5 +1,5 @@
 import { createCallerFactory, createTRPCRouter } from "@/server/api/trpc";
-import { userRouter } from "@/server/api/routers/userRouter";
+import { userRouter } from "@/server/api/routers/user";
 import { notionRouter } from "@/server/api/routers/notion";
 
 // Primary router: aggregates all routers from /api/routers
