@@ -18,6 +18,7 @@ const SUPPORTED_PROPERTY_TYPES = [
   "files"
 ];
 
+
 export const notionRouter = createTRPCRouter({
   /**
    * Retrieves a list of Notion databases linked to the user's account.
@@ -112,12 +113,21 @@ function extractTitle(response: any): string {
 }
 
 /**
+ * Normalizes an ID by removing special characters and spaces.
+ */
+function normalizeId(id: string): string {
+  return id
+    .replace(/%[0-9A-F]{2}/gi, '') // Removes URL escape sequences
+    .replace(/[^a-zA-Z0-9-_]/g, '_') // Replaces special characters with underscores
+    .toLowerCase();
+}
+/**
  * Formats Notion database properties to match supported types.
  */
 function formatProperties(properties: Record<string, any>) {
   return Object.entries(properties)
     .map(([key, prop]) => ({
-      id: prop.id,
+      id: normalizeId(prop.id),
       name: key,
       type: prop.type,
       options: getPropertyOptions(prop),
