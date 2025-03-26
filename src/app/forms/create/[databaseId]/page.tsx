@@ -1,43 +1,43 @@
-import { auth } from "@/server/auth/config";
-import { redirect } from "next/navigation";
-import { api } from "@/trpc/server";
-import { FormEditor } from "@/app/_components/form-editor/FormEditor";
-import { FormEditorNavbar } from "@/app/_components/form-editor/FormEditorNavbar";
+import { auth } from '@/server/auth/config'
+import { redirect } from 'next/navigation'
+import { api } from '@/trpc/server'
+import { FormEditor } from '@/app/_components/form-editor/FormEditor'
+import { FormEditorNavbar } from '@/app/_components/form-editor/FormEditorNavbar'
 
 interface EditorPageProps {
-  params: Promise<{ databaseId: string }>;
+  params: Promise<{ databaseId: string }>
 }
 
 interface DatabaseSchema {
-  id: string;
-  title: string;
+  id: string
+  title: string
   properties: Array<{
-    id: string;
-    name: string;
-    type: string;
-    options: Array<{ id: string; name: string; color?: string }> | null;
-    [key: string]: any;
-  }>;
+    id: string
+    name: string
+    type: string
+    options: Array<{ id: string; name: string; color?: string }> | null
+    [key: string]: any
+  }>
 }
 
 export default async function FormEditorPage({ params }: EditorPageProps) {
   // Authenticate user session
-  const session = await auth();
+  const session = await auth()
   if (!session) {
-    redirect("/");
+    redirect('/')
   }
 
   // Extract databaseId from route parameters
-  const { databaseId } = await params;
+  const { databaseId } = await params
 
   // Fetch database schema from Notion, fallback to an empty structure if it fails
   const databaseSchema: DatabaseSchema = await api.notion
     .getDatabaseSchema({ databaseId })
     .catch(() => ({
       id: databaseId,
-      title: "Untitled Form",
+      title: 'Untitled Form',
       properties: [],
-    }));
+    }))
 
   return (
     <div className="flex h-screen flex-col">
@@ -46,10 +46,8 @@ export default async function FormEditorPage({ params }: EditorPageProps) {
 
       {/* Main editor content */}
       <main className="flex-1 overflow-auto">
-        <div className="container py-6">
-          <FormEditor databaseId={databaseId} initialData={databaseSchema} />
-        </div>
+        <FormEditor initialData={databaseSchema} />
       </main>
     </div>
-  );
+  )
 }
