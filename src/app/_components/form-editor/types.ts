@@ -1,4 +1,5 @@
-// Field definition (based on Notion property types)
+// ─── Core Types ────────────────────────────────────────────────────────────────
+
 export interface FormField {
   id: string
   name: string
@@ -8,22 +9,22 @@ export interface FormField {
   [key: string]: any
 }
 
-// Basic schema shape
 export interface DatabaseSchema {
   id: string
   title: string
   properties: FormField[]
 }
 
-// Editor modes
 export type FormEditorMode = 'edit' | 'live'
 
-// Props for the main editor component
+// ─── Main Editor ───────────────────────────────────────────────────────────────
+
 export interface FormEditorProps {
   initialData: DatabaseSchema
 }
 
-// Props for the preview toolbar in the editor
+// ─── Preview Toolbar ──────────────────────────────────────────────────────────
+
 export interface FormPreviewToolbarProps {
   isFullscreen: boolean
   onToggleFullscreen: () => void
@@ -32,7 +33,8 @@ export interface FormPreviewToolbarProps {
   showPropertiesPanelToggle?: boolean
 }
 
-// Props for rendering individual form fields
+// ─── Field Rendering ──────────────────────────────────────────────────────────
+
 export interface FormFieldProps {
   field: FormField
   isSelected?: boolean
@@ -42,11 +44,46 @@ export interface FormFieldProps {
   mode?: FormEditorMode
 }
 
-// Props for field inputs
 export interface FieldInputProps {
   field: FormField
   isSelected?: boolean
   value?: any
   onChange?: (value: any) => void
   mode?: FormEditorMode
+}
+
+// ─── Sidebar & FieldRow ───────────────────────────────────────────────────────
+
+export interface FieldSidebarProps {
+  fields: FormField[]
+  selectedFieldId: string | null
+  onFieldSelect: (id: string) => void
+  onRefreshFields?: () => Promise<void>
+  onToggleRequired?: (fieldId: string, required: boolean) => void
+  onToggleVisibility?: (fieldId: string, hidden: boolean) => void
+  onRenameField?: (fieldId: string, newName: string) => void
+}
+
+export interface FieldRowProps {
+  field: FormField
+  isSelected: boolean
+  isEditing: boolean
+  isHidden: boolean
+  editingName: string
+  onClick: () => void
+  onStartEditing: (id: string, name: string, e: React.MouseEvent) => void
+  onRename: (e?: React.FormEvent) => void
+  onKeyDown: (e: React.KeyboardEvent) => void
+  onToggleRequired: (
+    fieldId: string,
+    required: boolean,
+    e: React.MouseEvent
+  ) => void
+  onToggleVisibility: (
+    fieldId: string,
+    hidden: boolean,
+    e: React.MouseEvent
+  ) => void
+  editInputRef: React.RefObject<HTMLInputElement>
+  nameRef: (el: HTMLSpanElement | null) => void
 }
