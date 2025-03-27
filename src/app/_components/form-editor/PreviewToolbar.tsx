@@ -1,25 +1,33 @@
 'use client'
 
 import { Button } from '@/components/ui/button'
-import { Maximize, Minimize, PanelRight, PanelLeft } from 'lucide-react'
-import type { FormPreviewToolbarProps } from '@/app/_components/form-editor/types'
+import {
+  Maximize,
+  Minimize,
+  PanelRight,
+  PanelLeft,
+  RefreshCw,
+} from 'lucide-react'
+import type { PreviewToolbarProps } from '@/app/_components/form-editor/types'
 
-export function FormPreviewToolbar({
+export function PreviewToolbar({
   isFullscreen,
   onToggleFullscreen,
   onTogglePropertiesPanel,
   isPropertiesPanelVisible,
   showPropertiesPanelToggle = false,
-}: FormPreviewToolbarProps) {
+  isSubmitted = false,
+  onRestart,
+}: PreviewToolbarProps) {
   return (
     <div className="flex flex-col">
       {/* Toolbar header */}
-      <div className="flex items-center justify-between px-3 pb-3 pt-4">
+      <div className="flex items-center justify-between px-3 pb-3 pt-3">
         <span className="text-sm font-semibold text-muted-foreground">
           Form Preview
         </span>
         <div className="flex items-center gap-2">
-          {/* Fullscreen toggle */}
+          {/* Toggle fullscreen mode */}
           <Button
             variant="ghost"
             size="icon"
@@ -34,7 +42,20 @@ export function FormPreviewToolbar({
             )}
           </Button>
 
-          {/* Properties panel toggle */}
+          {/* Show restart button if form was submitted */}
+          {isSubmitted && onRestart && (
+            <Button
+              variant="outline"
+              size="sm"
+              onClick={onRestart}
+              className="h-7 gap-1.5 text-xs text-muted-foreground hover:text-foreground"
+            >
+              <RefreshCw className="h-3.5 w-3.5" />
+              Re-start
+            </Button>
+          )}
+
+          {/* Toggle side panel for field config (optional) */}
           {showPropertiesPanelToggle && onTogglePropertiesPanel && (
             <Button
               variant="ghost"
@@ -54,8 +75,9 @@ export function FormPreviewToolbar({
           )}
         </div>
       </div>
-      {/* Divider */}
-      <div className="ml-3 h-[1px] w-3/4 bg-gradient-to-r from-border to-transparent"></div>
+
+      {/* Divider line */}
+      <div className="ml-3 h-[1px] w-3/4 bg-gradient-to-r from-border to-transparent" />
     </div>
   )
 }

@@ -25,12 +25,14 @@ export interface FormEditorProps {
 
 // ─── Preview Toolbar ──────────────────────────────────────────────────────────
 
-export interface FormPreviewToolbarProps {
+export interface PreviewToolbarProps {
   isFullscreen: boolean
   onToggleFullscreen: () => void
   onTogglePropertiesPanel?: () => void
   isPropertiesPanelVisible?: boolean
   showPropertiesPanelToggle?: boolean
+  isSubmitted?: boolean
+  onRestart?: () => void
 }
 
 // ─── Field Rendering ──────────────────────────────────────────────────────────

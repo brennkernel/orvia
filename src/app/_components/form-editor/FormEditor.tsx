@@ -6,9 +6,10 @@ import type {
   FormEditorMode,
   FormField as FormFieldData,
 } from '@/app/_components/form-editor/types'
-import { FormPreviewToolbar } from '@/app/_components/form-editor/PreviewToolbar'
+import { PreviewToolbar } from '@/app/_components/form-editor/PreviewToolbar'
 import { FormField } from '@/app/_components/form-editor/FormField'
 import { FieldSidebar } from '@/app/_components/form-editor/FieldSidebar'
+import { Button } from '@/components/ui/button'
 import { cn } from '@/lib/utils'
 
 export function FormEditor({ initialData }: FormEditorProps) {
@@ -19,8 +20,9 @@ export function FormEditor({ initialData }: FormEditorProps) {
   const [fields, setFields] = useState<FormFieldData[]>(
     initialData?.properties || []
   )
+  const [isSubmitted, setIsSubmitted] = useState(false)
 
-  // Sync preview mode when toggling fullscreen
+  // Update preview mode when toggling fullscreen
   useEffect(() => {
     setPreviewMode(isPreviewFullscreen ? 'live' : 'edit')
     if (isPreviewFullscreen) {
@@ -28,7 +30,7 @@ export function FormEditor({ initialData }: FormEditorProps) {
     }
   }, [isPreviewFullscreen])
 
-  // Fallback UI
+  // Fallback if no initial form data is provided
   if (!initialData) {
     return (
       <div className="p-8 text-center">
@@ -37,17 +39,17 @@ export function FormEditor({ initialData }: FormEditorProps) {
     )
   }
 
-  // Handle field value changes
+  // Handle individual field changes
   const handleFieldChange = (fieldId: string, value: any) => {
     setFormValues(prev => ({ ...prev, [fieldId]: value }))
   }
 
-  // Select field in sidebar/editor
+  // Select a field to edit
   const handleFieldSelect = (fieldId: string) => {
     setSelectedFieldId(fieldId)
   }
 
-  // Simulate Notion field refresh
+  // Simulate a field refresh from Notion
   const handleRefreshFields = async (): Promise<void> => {
     try {
       await new Promise<void>(resolve => {
@@ -61,18 +63,32 @@ export function FormEditor({ initialData }: FormEditorProps) {
     }
   }
 
-  // Toggle "required" state for a field
+  // Toggle required status for a field
   const handleToggleRequired = (fieldId: string, required: boolean) => {
     setFields(prev =>
       prev.map(field => (field.id === fieldId ? { ...field, required } : field))
     )
   }
 
-  // Toggle "hidden" state for a field
+  // Toggle hidden status for a field
   const handleToggleVisibility = (fieldId: string, hidden: boolean) => {
     setFields(prev =>
       prev.map(field => (field.id === fieldId ? { ...field, hidden } : field))
     )
+  }
+
+  // Submit form and show confirmation
+  const handleFormSubmit = (e: React.FormEvent) => {
+    e.preventDefault()
+    console.log('Form submitted with values:', formValues)
+    setIsSubmitted(true)
+  }
+
+  // Reset form state to initial
+  const handleRestart = () => {
+    setFormValues({})
+    setIsSubmitted(false)
+    setSelectedFieldId(null)
   }
 
   return (
@@ -93,33 +109,63 @@ export function FormEditor({ initialData }: FormEditorProps) {
           isPreviewFullscreen && 'fixed inset-0 z-50 bg-background p-8'
         )}
       >
-        <FormPreviewToolbar
+        <PreviewToolbar
           isFullscreen={isPreviewFullscreen}
           onToggleFullscreen={() => setIsPreviewFullscreen(prev => !prev)}
           onTogglePropertiesPanel={() => {}}
           isPropertiesPanelVisible={false}
           showPropertiesPanelToggle={false}
+          isSubmitted={isSubmitted}
+          onRestart={handleRestart}
         />
 
         <div className="flex-1 overflow-auto px-4">
           <div className="mx-auto max-w-lg space-y-6 py-8">
-            {fields
-              .filter(field => !field.hidden)
-              .map(field => (
-                <FormField
-                  key={field.id}
-                  field={field}
-                  isSelected={
-                    previewMode === 'edit' && selectedFieldId === field.id
-                  }
-                  onClick={() =>
-                    previewMode === 'edit' && setSelectedFieldId(field.id)
-                  }
-                  value={formValues[field.id]}
-                  onChange={value => handleFieldChange(field.id, value)}
-                  mode={previewMode}
-                />
-              ))}
+            {isSubmitted ? (
+              // Confirmation screen
+              <div className="space-y-6 text-left">
+                <h2 className="text-xl font-semibold text-foreground">
+                  Thanks! Your response has been saved.
+                </h2>
+                <p className="text-muted-foreground">
+                  This form is connected to your Notion database. You can
+                  preview how data is collected and stored.
+                </p>
+                <p className="text-sm text-muted-foreground">
+                  Want to try again? Just hit the restart button above.
+                </p>
+              </div>
+            ) : (
+              <form onSubmit={handleFormSubmit}>
+                <div className="space-y-6">
+                  {fields
+                    .filter(field => !field.hidden)
+                    .map(field => (
+                      <FormField
+                        key={field.id}
+                        field={field}
+                        isSelected={
+                          previewMode === 'edit' && selectedFieldId === field.id
+                        }
+                        onClick={() =>
+                          previewMode === 'edit' && setSelectedFieldId(field.id)
+                        }
+                        value={formValues[field.id]}
+                        onChange={value => handleFieldChange(field.id, value)}
+                        mode={previewMode}
+                      />
+                    ))}
+                  <div className="mt-8 flex flex-col items-center">
+                    <Button type="submit" className="px-8">
+                      Submit
+                    </Button>
+                    <div className="mt-3 text-xs text-muted-foreground">
+                      Powered by FormFlow
+                    </div>
+                  </div>
+                </div>
+              </form>
+            )}
           </div>
         </div>
       </div>
