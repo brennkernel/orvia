@@ -116,8 +116,8 @@ export function FormEditor({ initialData }: FormEditorProps) {
           onRestart={handleRestart}
         />
 
-        <div className="flex-1 overflow-auto px-4">
-          <div className="mx-auto max-w-lg space-y-6 py-8">
+        <div className="flex-1 overflow-auto px-2">
+          <div className="ml-32 mr-auto max-w-lg space-y-6 py-8">
             {isSubmitted ? (
               <div className="space-y-6 text-left">
                 <h2 className="text-xl font-semibold text-foreground">

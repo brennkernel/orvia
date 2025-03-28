@@ -2,7 +2,7 @@ import { auth } from '@/server/auth/config'
 import { redirect } from 'next/navigation'
 import { api } from '@/trpc/server'
 import { FormEditor } from '@/app/_components/form-editor/FormEditor'
-import { FormEditorNavbar } from '@/app/_components/form-editor/FormEditorNavbar'
+import { EditorNavbar } from '@/app/_components/form-editor/EditorNavbar'
 
 interface EditorPageProps {
   params: Promise<{ databaseId: string }>
@@ -42,7 +42,7 @@ export default async function FormEditorPage({ params }: EditorPageProps) {
   return (
     <div className="flex h-screen flex-col">
       {/* Editor navbar displaying the database title and actions */}
-      <FormEditorNavbar formTitle={databaseSchema.title} />
+      <EditorNavbar formTitle={databaseSchema.title} />
 
       {/* Main editor content */}
       <main className="flex-1 overflow-auto">

@@ -44,4 +44,9 @@
   body {
     @apply bg-background text-foreground; /* Set background and text color globally */
   }
+  html,
+  body {
+    height: 100%;
+    overflow: hidden;
+  }
 }
