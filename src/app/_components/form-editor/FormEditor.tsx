@@ -1,28 +1,34 @@
 'use client'
 
 import { useState, useEffect } from 'react'
+import { api } from '@/trpc/react'
+import { cn } from '@/lib/utils'
+import { Button } from '@/components/ui/button'
+
 import type {
   FormEditorProps,
   FormEditorMode,
   FormField as FormFieldData,
 } from '@/app/_components/form-editor/types'
+
 import { PreviewToolbar } from '@/app/_components/form-editor/PreviewToolbar'
-import { FormField } from '@/app/_components/form-editor/FormField'
 import { FieldSidebar } from '@/app/_components/form-editor/FieldSidebar'
-import { Button } from '@/components/ui/button'
-import { cn } from '@/lib/utils'
+import { FormField } from '@/app/_components/form-editor/FormField'
 
 export function FormEditor({ initialData }: FormEditorProps) {
   const [selectedFieldId, setSelectedFieldId] = useState<string | null>(null)
   const [isPreviewFullscreen, setIsPreviewFullscreen] = useState(false)
   const [previewMode, setPreviewMode] = useState<FormEditorMode>('edit')
   const [formValues, setFormValues] = useState<Record<string, any>>({})
-  const [fields, setFields] = useState<FormFieldData[]>(
-    initialData?.properties || []
-  )
+  const [fields, setFields] = useState<FormFieldData[]>(initialData.properties)
   const [isSubmitted, setIsSubmitted] = useState(false)
 
-  // Update preview mode when toggling fullscreen
+  const { refetch, isFetching } = api.notion.getDatabaseSchema.useQuery(
+    { databaseId: initialData.id },
+    { enabled: false }
+  )
+
+  // Sync fullscreen mode with preview state
   useEffect(() => {
     setPreviewMode(isPreviewFullscreen ? 'live' : 'edit')
     if (isPreviewFullscreen) {
@@ -30,65 +36,54 @@ export function FormEditor({ initialData }: FormEditorProps) {
     }
   }, [isPreviewFullscreen])
 
-  // Fallback if no initial form data is provided
-  if (!initialData) {
-    return (
-      <div className="p-8 text-center">
-        <p className="text-muted-foreground">No form data available</p>
-      </div>
-    )
+  // Refresh fields from Notion
+  const handleRefreshFields = async () => {
+    try {
+      const { data } = await refetch()
+      if (data?.properties) {
+        setFields(data.properties)
+      }
+    } catch (err) {
+      console.error('Failed to refresh fields:', err)
+    }
   }
 
-  // Handle individual field changes
   const handleFieldChange = (fieldId: string, value: any) => {
     setFormValues(prev => ({ ...prev, [fieldId]: value }))
   }
 
-  // Select a field to edit
   const handleFieldSelect = (fieldId: string) => {
     setSelectedFieldId(fieldId)
   }
 
-  // Simulate a field refresh from Notion
-  const handleRefreshFields = async (): Promise<void> => {
-    try {
-      await new Promise<void>(resolve => {
-        setTimeout(() => {
-          console.log('Fields refreshed from Notion')
-          resolve()
-        }, 1000)
-      })
-    } catch (error) {
-      console.error('Error refreshing fields:', error)
-    }
-  }
-
-  // Toggle required status for a field
   const handleToggleRequired = (fieldId: string, required: boolean) => {
     setFields(prev =>
-      prev.map(field => (field.id === fieldId ? { ...field, required } : field))
+      prev.map(f => (f.id === fieldId ? { ...f, required } : f))
     )
   }
 
-  // Toggle hidden status for a field
   const handleToggleVisibility = (fieldId: string, hidden: boolean) => {
-    setFields(prev =>
-      prev.map(field => (field.id === fieldId ? { ...field, hidden } : field))
-    )
+    setFields(prev => prev.map(f => (f.id === fieldId ? { ...f, hidden } : f)))
   }
 
-  // Submit form and show confirmation
   const handleFormSubmit = (e: React.FormEvent) => {
     e.preventDefault()
     console.log('Form submitted with values:', formValues)
     setIsSubmitted(true)
   }
 
-  // Reset form state to initial
   const handleRestart = () => {
     setFormValues({})
     setIsSubmitted(false)
     setSelectedFieldId(null)
+  }
+
+  if (!initialData) {
+    return (
+      <div className="p-8 text-center">
+        <p className="text-muted-foreground">No form data available</p>
+      </div>
+    )
   }
 
   return (
@@ -101,8 +96,10 @@ export function FormEditor({ initialData }: FormEditorProps) {
           onRefreshFields={handleRefreshFields}
           onToggleRequired={handleToggleRequired}
           onToggleVisibility={handleToggleVisibility}
+          isRefreshing={isFetching}
         />
       )}
+
       <div
         className={cn(
           'flex flex-1 flex-col overflow-auto',
@@ -122,7 +119,6 @@ export function FormEditor({ initialData }: FormEditorProps) {
         <div className="flex-1 overflow-auto px-4">
           <div className="mx-auto max-w-lg space-y-6 py-8">
             {isSubmitted ? (
-              // Confirmation screen
               <div className="space-y-6 text-left">
                 <h2 className="text-xl font-semibold text-foreground">
                   Thanks! Your response has been saved.

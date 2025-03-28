@@ -1,7 +1,9 @@
 'use client'
 
-import type React from 'react'
 import { useState, useRef, useEffect } from 'react'
+import { Search, RefreshCw, Info } from 'lucide-react'
+import type React from 'react'
+
 import { Input } from '@/components/ui/input'
 import { Button } from '@/components/ui/button'
 import { ScrollArea } from '@/components/ui/scroll-area'
@@ -11,7 +13,7 @@ import {
   TooltipProvider,
   TooltipTrigger,
 } from '@/components/ui/tooltip'
-import { Search, RefreshCw } from 'lucide-react'
+
 import { cn } from '@/lib/utils'
 import type { FieldSidebarProps } from '@/app/_components/form-editor/types'
 import { FieldRow } from '@/app/_components/form-editor/FieldRow'
@@ -24,19 +26,15 @@ export function FieldSidebar({
   onToggleRequired,
   onToggleVisibility,
   onRenameField,
+  isRefreshing = false,
 }: FieldSidebarProps) {
   const [searchTerm, setSearchTerm] = useState('')
-  const [isRefreshing, setIsRefreshing] = useState(false)
   const [editingFieldId, setEditingFieldId] = useState<string | null>(null)
   const [editingName, setEditingName] = useState('')
   const editInputRef = useRef<HTMLInputElement>(null)
   const fieldNameRefs = useRef<Record<string, HTMLSpanElement | null>>({})
 
-  const filteredFields = fields.filter(field =>
-    field.name.toLowerCase().includes(searchTerm.toLowerCase())
-  )
-
-  // Adjust input width to match field name
+  // Auto-size editing input to match field name width
   useEffect(() => {
     if (
       editingFieldId &&
@@ -48,17 +46,9 @@ export function FieldSidebar({
     }
   }, [editingFieldId])
 
-  const handleRefresh = async () => {
-    if (!onRefreshFields) return
-    setIsRefreshing(true)
-    try {
-      await onRefreshFields()
-    } catch (error) {
-      console.error('Error refreshing fields:', error)
-    } finally {
-      setIsRefreshing(false)
-    }
-  }
+  const filteredFields = fields.filter(field =>
+    field.name.toLowerCase().includes(searchTerm.toLowerCase())
+  )
 
   const handleToggleRequired = (
     fieldId: string,
@@ -107,40 +97,44 @@ export function FieldSidebar({
   }
 
   return (
-    <div className="mr-4 flex w-[280px] flex-col rounded-sm bg-card/90 backdrop-blur-sm">
+    <div className="mr-4 flex h-full w-[280px] flex-col rounded-sm bg-card/90 backdrop-blur-sm">
       {/* Header */}
       <div className="flex items-center justify-between px-4 pb-3 pt-4">
         <h2 className="text-sm font-medium text-muted-foreground">
           Form Fields
         </h2>
-        <TooltipProvider>
-          <Tooltip>
-            <TooltipTrigger asChild>
-              <Button
-                variant="ghost"
-                size="sm"
-                className="h-6 w-6 p-0"
-                onClick={handleRefresh}
-                disabled={isRefreshing}
-              >
-                <RefreshCw
-                  className={cn(
-                    'h-4 w-4 text-muted-foreground',
-                    isRefreshing && 'animate-spin'
-                  )}
-                />
-              </Button>
-            </TooltipTrigger>
-            <TooltipContent>
-              <p>Refresh Notion Database</p>
-            </TooltipContent>
-          </Tooltip>
-        </TooltipProvider>
+
+        {onRefreshFields && (
+          <TooltipProvider>
+            <Tooltip>
+              <TooltipTrigger asChild>
+                <Button
+                  variant="ghost"
+                  size="sm"
+                  className="h-6 w-6 p-0"
+                  onClick={onRefreshFields}
+                  disabled={isRefreshing}
+                >
+                  <RefreshCw
+                    className={cn(
+                      'h-4 w-4 text-muted-foreground',
+                      isRefreshing && 'animate-spin'
+                    )}
+                  />
+                </Button>
+              </TooltipTrigger>
+              <TooltipContent>
+                <p>Refresh Notion Database</p>
+              </TooltipContent>
+            </Tooltip>
+          </TooltipProvider>
+        )}
       </div>
 
+      {/* Divider */}
       <div className="ml-3 h-[1px] w-3/4 bg-gradient-to-r from-border to-transparent" />
 
-      {/* Search input */}
+      {/* Search */}
       <div className="px-4 pb-2 pt-3">
         <div className="relative">
           <Search className="absolute left-2.5 top-2.5 h-4 w-4 text-muted-foreground" />
@@ -191,6 +185,15 @@ export function FieldSidebar({
           )}
         </div>
       </ScrollArea>
+      {/* Footer warning */}
+      <div className="mt-auto pb-4">
+        <div className="mx-auto flex w-[92%] items-start gap-2 rounded-sm bg-yellow-300/5 px-3 py-2.5 text-[11.5px] leading-snug text-yellow-300">
+          <Info className="mt-0.5 h-4 w-4 shrink-0 text-yellow-300" />
+          <span>
+            Still seeing the field? Make sure it’s deleted in the response DB.
+          </span>
+        </div>
+      </div>
     </div>
   )
 }

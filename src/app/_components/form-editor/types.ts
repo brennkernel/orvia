@@ -64,6 +64,7 @@ export interface FieldSidebarProps {
   onToggleRequired?: (fieldId: string, required: boolean) => void
   onToggleVisibility?: (fieldId: string, hidden: boolean) => void
   onRenameField?: (fieldId: string, newName: string) => void
+  isRefreshing?: boolean
 }
 
 export interface FieldRowProps {
