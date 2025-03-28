@@ -187,8 +187,8 @@ export function FieldSidebar({
       </ScrollArea>
       {/* Footer warning */}
       <div className="mt-auto pb-4">
-        <div className="mx-auto flex w-[92%] items-start gap-2 rounded-sm bg-yellow-300/5 px-3 py-2.5 text-[11.5px] leading-snug text-yellow-300">
-          <Info className="mt-0.5 h-4 w-4 shrink-0 text-yellow-300" />
+        <div className="mx-auto flex w-[92%] items-start gap-2 rounded-sm bg-yellow-300/5 px-3 py-2.5 text-[11.5px] leading-snug text-yellow-300/80">
+          <Info className="mt-0.5 h-4 w-4 shrink-0 text-yellow-300/80" />
           <span>
             Still seeing the field? Make sure it’s deleted in the response DB.
           </span>

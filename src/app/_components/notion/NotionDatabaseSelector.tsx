@@ -1,9 +1,9 @@
-"use client";
+'use client'
 
-import { useRouter } from "next/navigation";
-import { useState, useCallback, useMemo } from "react";
-import Image from "next/image";
-import { Button } from "@/components/ui/button";
+import { useRouter } from 'next/navigation'
+import { useState, useCallback, useMemo } from 'react'
+import Image from 'next/image'
+import { Button } from '@/components/ui/button'
 import {
   Card,
   CardContent,
@@ -11,46 +11,46 @@ import {
   CardFooter,
   CardHeader,
   CardTitle,
-} from "@/components/ui/card";
-import { Input } from "@/components/ui/input";
-import { Search, Check, Loader2 } from "lucide-react";
-import { NotionIcon } from "@/app/_components/notion/NotionIcon";
+} from '@/components/ui/card'
+import { Input } from '@/components/ui/input'
+import { Search, Check, Loader2 } from 'lucide-react'
+import { NotionIcon } from '@/app/_components/notion/NotionIcon'
 
 // Define the structure of a Notion database
 interface Database {
-  id: string;
-  name: string;
-  icon: string | null;
+  id: string
+  name: string
+  icon: string | null
 }
 
 interface NotionDatabaseSelectorProps {
-  databases: Database[];
+  databases: Database[]
 }
 
 export function NotionDatabaseSelector({
   databases,
 }: NotionDatabaseSelectorProps) {
-  const router = useRouter();
+  const router = useRouter()
   const [selectedDatabaseId, setSelectedDatabaseId] = useState<string | null>(
-    null,
-  );
-  const [searchTerm, setSearchTerm] = useState("");
-  const [isNavigating, setIsNavigating] = useState(false);
+    null
+  )
+  const [searchTerm, setSearchTerm] = useState('')
+  const [isNavigating, setIsNavigating] = useState(false)
 
   // Filters databases based on user input
   const filteredDatabases = useMemo(() => {
-    return databases.filter((db) =>
-      db.name.toLowerCase().includes(searchTerm.toLowerCase()),
-    );
-  }, [databases, searchTerm]);
+    return databases.filter(db =>
+      db.name.toLowerCase().includes(searchTerm.toLowerCase())
+    )
+  }, [databases, searchTerm])
 
   // Handle navigation after selecting a database
   const handleContinue = useCallback(() => {
     if (selectedDatabaseId) {
-      setIsNavigating(true);
-      router.push(`/forms/create/${selectedDatabaseId}`);
+      setIsNavigating(true)
+      router.push(`/forms/create/${selectedDatabaseId}`)
     }
-  }, [router, selectedDatabaseId]);
+  }, [router, selectedDatabaseId])
 
   return (
     <div className="mx-auto max-w-md">
@@ -84,7 +84,7 @@ export function NotionDatabaseSelector({
               placeholder="Search databases..."
               className="border-border/30 bg-muted/30 pl-9 transition-colors focus:border-primary/50"
               value={searchTerm}
-              onChange={(e) => setSearchTerm(e.target.value)}
+              onChange={e => setSearchTerm(e.target.value)}
             />
           </div>
 
@@ -112,13 +112,13 @@ export function NotionDatabaseSelector({
                 Loading...
               </>
             ) : (
-              "Continue"
+              'Continue'
             )}
           </Button>
         </CardFooter>
       </Card>
     </div>
-  );
+  )
 }
 
 // Displays the list of available databases
@@ -128,32 +128,32 @@ function DatabaseList({
   setSelectedDatabaseId,
   searchTerm,
 }: {
-  databases: Database[];
-  selectedDatabaseId: string | null;
-  setSelectedDatabaseId: (id: string) => void;
-  searchTerm: string;
+  databases: Database[]
+  selectedDatabaseId: string | null
+  setSelectedDatabaseId: (id: string) => void
+  searchTerm: string
 }) {
   // Handles database selection
   const handleSelectDatabase = useCallback((id: string) => {
-    setSelectedDatabaseId(id);
-  }, []);
+    setSelectedDatabaseId(id)
+  }, [])
 
   return (
     <div className="h-full space-y-2 overflow-y-auto pr-1">
       {databases.length > 0 ? (
-        databases.map((database) => (
+        databases.map(database => (
           <div
             key={database.id}
             role="button"
             tabIndex={0}
             className={`flex cursor-pointer items-center rounded-lg border p-3 transition-all ${
               selectedDatabaseId === database.id
-                ? "border-primary/30 bg-primary/10"
-                : "border-transparent hover:bg-muted/30"
+                ? 'border-primary/30 bg-primary/10'
+                : 'border-transparent hover:bg-muted/30'
             }`}
             onClick={() => handleSelectDatabase(database.id)}
-            onKeyDown={(e) =>
-              e.key === "Enter" && handleSelectDatabase(database.id)
+            onKeyDown={e =>
+              e.key === 'Enter' && handleSelectDatabase(database.id)
             }
           >
             {/* Database Icon */}
@@ -179,5 +179,5 @@ function DatabaseList({
         </div>
       )}
     </div>
-  );
+  )
 }

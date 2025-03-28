@@ -1,4 +1,4 @@
-import SignInButton from "@/app/_components/SignInButton"
+import SignInButton from '@/app/_components/SignInButton'
 
 export default async function Home() {
   return (
@@ -7,8 +7,8 @@ export default async function Home() {
         <h1 className="text-5xl font-extrabold tracking-tight sm:text-[5rem]">
           FormFlow ⚫️
         </h1>
-        <SignInButton/>
+        <SignInButton />
       </div>
     </main>
-  );
+  )
 }

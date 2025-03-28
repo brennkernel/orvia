@@ -1,23 +1,23 @@
-import { auth } from "@/server/auth/config";
-import { redirect } from "next/navigation";
-import { api } from "@/trpc/server";
-import { Button } from "@/components/ui/button";
-import { ArrowLeft } from "lucide-react";
-import Link from "next/link";
-import { NotionDatabaseSelector } from "@/app/_components/notion/NotionDatabaseSelector";
+import { auth } from '@/server/auth/config'
+import { redirect } from 'next/navigation'
+import { api } from '@/trpc/server'
+import { Button } from '@/components/ui/button'
+import { ArrowLeft } from 'lucide-react'
+import Link from 'next/link'
+import { NotionDatabaseSelector } from '@/app/_components/notion/NotionDatabaseSelector'
 
 export default async function CreateFormPage() {
   // Authenticate user session
-  const session = await auth();
+  const session = await auth()
   if (!session) {
-    redirect("/");
+    redirect('/')
   }
 
   // Fetch available Notion databases
   const databases = await api.notion
     .listDatabases()
-    .then((res) => res.databases)
-    .catch(() => []);
+    .then(res => res.databases)
+    .catch(() => [])
 
   return (
     <div className="flex h-screen flex-col">
@@ -40,5 +40,5 @@ export default async function CreateFormPage() {
         <NotionDatabaseSelector databases={databases} />
       </main>
     </div>
-  );
+  )
 }

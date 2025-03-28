@@ -1,23 +1,22 @@
-import { createTRPCRouter, protectedProcedure } from "@/server/api/trpc"
-import { TRPCError } from "@trpc/server"
-import { getNotionClient } from "@/server/notion/client"
-import { z } from "zod"
+import { createTRPCRouter, protectedProcedure } from '@/server/api/trpc'
+import { TRPCError } from '@trpc/server'
+import { getNotionClient } from '@/server/notion/client'
+import { z } from 'zod'
 
 // Supported Notion property types for forms
 const SUPPORTED_PROPERTY_TYPES = [
-  "title",
-  "rich_text",
-  "select",
-  "multi_select",
-  "date",
-  "number",
-  "checkbox",
-  "email",
-  "url",
-  "phone_number",
-  "files"
-];
-
+  'title',
+  'rich_text',
+  'select',
+  'multi_select',
+  'date',
+  'number',
+  'checkbox',
+  'email',
+  'url',
+  'phone_number',
+  'files',
+]
 
 export const notionRouter = createTRPCRouter({
   /**
@@ -28,22 +27,22 @@ export const notionRouter = createTRPCRouter({
       const userId = ctx.session.user.id
       if (!userId) {
         throw new TRPCError({
-          code: "UNAUTHORIZED",
-          message: "User ID is missing from session",
+          code: 'UNAUTHORIZED',
+          message: 'User ID is missing from session',
         })
       }
 
       const client = await getNotionClient(userId)
-      
+
       // Fetch databases from Notion
       const response = await client.search({
-        filter: { property: "object", value: "database" },
+        filter: { property: 'object', value: 'database' },
       })
 
       // Format response
       const databases = response.results.map((db: any) => ({
         id: db.id,
-        name: db.title?.[0]?.plain_text || "Untitled Database",
+        name: db.title?.[0]?.plain_text || 'Untitled Database',
         icon: db.icon?.emoji || db.icon?.external?.url || null,
         lastEdited: db.last_edited_time,
         url: db.url,
@@ -55,28 +54,28 @@ export const notionRouter = createTRPCRouter({
         throw error
       }
       throw new TRPCError({
-        code: "INTERNAL_SERVER_ERROR",
-        message: "Failed to fetch databases from Notion",
+        code: 'INTERNAL_SERVER_ERROR',
+        message: 'Failed to fetch databases from Notion',
       })
     }
   }),
 
-   /**
+  /**
    * Retrieves the schema (structure) of a specific Notion database.
    */
   getDatabaseSchema: protectedProcedure
     .input(
       z.object({
-        databaseId: z.string().min(1, "Database ID cannot be empty"),
-      }),
+        databaseId: z.string().min(1, 'Database ID cannot be empty'),
+      })
     )
     .query(async ({ ctx, input }) => {
       try {
         const userId = ctx.session.user.id
         if (!userId) {
           throw new TRPCError({
-            code: "UNAUTHORIZED",
-            message: "User ID is missing from session",
+            code: 'UNAUTHORIZED',
+            message: 'User ID is missing from session',
           })
         }
 
@@ -85,31 +84,30 @@ export const notionRouter = createTRPCRouter({
           database_id: input.databaseId,
         })
 
-         return {
+        return {
           id: response.id,
           title: extractTitle(response),
           properties: formatProperties(response.properties),
-        };
+        }
       } catch (error: any) {
         if (error instanceof TRPCError) {
-          throw error;
+          throw error
         }
         throw new TRPCError({
-          code: "INTERNAL_SERVER_ERROR",
-          message: "Failed to fetch database schema from Notion",
-        });
+          code: 'INTERNAL_SERVER_ERROR',
+          message: 'Failed to fetch database schema from Notion',
+        })
       }
     }),
 })
-
 
 /**
  * Extracts the title of a Notion database.
  */
 function extractTitle(response: any): string {
   return Array.isArray(response.title) && response.title.length > 0
-    ? response.title[0]?.plain_text || "Untitled Database"
-    : "Untitled Database";
+    ? response.title[0]?.plain_text || 'Untitled Database'
+    : 'Untitled Database'
 }
 
 /**
@@ -119,7 +117,7 @@ function normalizeId(id: string): string {
   return id
     .replace(/%[0-9A-F]{2}/gi, '') // Removes URL escape sequences
     .replace(/[^a-zA-Z0-9-_]/g, '_') // Replaces special characters with underscores
-    .toLowerCase();
+    .toLowerCase()
 }
 /**
  * Formats Notion database properties to match supported types.
@@ -132,14 +130,14 @@ function formatProperties(properties: Record<string, any>) {
       type: prop.type,
       options: getPropertyOptions(prop),
     }))
-    .filter((prop) => SUPPORTED_PROPERTY_TYPES.includes(prop.type));
+    .filter(prop => SUPPORTED_PROPERTY_TYPES.includes(prop.type))
 }
 
 /**
  * Extracts selectable options for supported Notion properties.
  */
 function getPropertyOptions(property: any) {
-  if (!property?.type) return null;
-  const optionsField = property[property.type]?.options;
-  return Array.isArray(optionsField) ? optionsField : null;
+  if (!property?.type) return null
+  const optionsField = property[property.type]?.options
+  return Array.isArray(optionsField) ? optionsField : null
 }

@@ -1,4 +1,4 @@
-import { handlers } from "@/server/auth/config"
+import { handlers } from '@/server/auth/config'
 
 /**
  * API route for authentication (NextAuth.js handlers).

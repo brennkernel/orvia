@@ -1,5 +1,5 @@
-import { createEnv } from "@t3-oss/env-nextjs";
-import { z } from "zod";
+import { createEnv } from '@t3-oss/env-nextjs'
+import { z } from 'zod'
 
 /**
  * Environment configuration with validation.
@@ -12,7 +12,9 @@ export const env = createEnv({
     DIRECT_URL: z.string().url(),
 
     // App environment
-    NODE_ENV: z.enum(["development", "test", "production"]).default("development"),
+    NODE_ENV: z
+      .enum(['development', 'test', 'production'])
+      .default('development'),
 
     // Notion API
     NOTION_API_KEY: z.string(),
@@ -42,4 +44,4 @@ export const env = createEnv({
     NEXTAUTH_SECRET: process.env.NEXTAUTH_SECRET,
     NEXTAUTH_URL: process.env.NEXTAUTH_URL,
   },
-});
+})

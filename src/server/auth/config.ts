@@ -1,26 +1,21 @@
-import NextAuth from "next-auth"
-import Notion from "next-auth/providers/notion"
-import { PrismaAdapter } from "@auth/prisma-adapter"
-import { db } from "@/server/db";
-import { env } from "@/env";
+import NextAuth from 'next-auth'
+import Notion from 'next-auth/providers/notion'
+import { PrismaAdapter } from '@auth/prisma-adapter'
+import { db } from '@/server/db'
+import { env } from '@/env'
 
 /**
  * NextAuth.js authentication setup with:
  * - Notion as an OAuth provider.
  * - Prisma as the database adapter for session management.
  */
-export const { 
-  handlers,
-  signIn,
-  signOut,
-  auth,
-} = NextAuth({
+export const { handlers, signIn, signOut, auth } = NextAuth({
   adapter: PrismaAdapter(db), // Stores user sessions in the database
   providers: [
     Notion({
       clientId: env.AUTH_NOTION_ID,
       clientSecret: env.AUTH_NOTION_SECRET,
-      redirectUri:env.AUTH_NOTION_REDIRECT_URI,
+      redirectUri: env.AUTH_NOTION_REDIRECT_URI,
     }),
   ],
   callbacks: {
@@ -45,7 +40,7 @@ export const {
       await db.user.update({
         where: { id: user.id },
         data: { emailVerified: new Date() },
-      });
+      })
     },
-  }
+  },
 })
