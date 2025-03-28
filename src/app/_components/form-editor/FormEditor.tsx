@@ -117,7 +117,12 @@ export function FormEditor({ initialData }: FormEditorProps) {
         />
 
         <div className="flex-1 overflow-auto px-2">
-          <div className="ml-32 mr-auto max-w-lg space-y-6 py-8">
+          <div
+            className={cn(
+              'max-w-lg space-y-6 py-8',
+              !isPreviewFullscreen ? 'ml-32 mr-auto' : 'mx-auto'
+            )}
+          >
             {isSubmitted ? (
               <div className="space-y-6 text-left">
                 <h2 className="text-xl font-semibold text-foreground">
