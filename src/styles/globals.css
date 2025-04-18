@@ -4,49 +4,54 @@
 
 @layer base {
   :root {
-    /* Global color variables following Tailwind's HSL format */
-    --background: 240 3% 16%; /* #27272A - Main background color */
-    --foreground: 0 0% 98%; /* Text color on dark backgrounds */
+    /* Base gray palette (tinted with primary) */
+    --background: 280 38% 6%; /* gray-950 */
+    --foreground: 253 47% 96%; /* gray-50 */
 
-    --card: 240 3% 19%; /* Slightly lighter than background for cards */
-    --card-foreground: 0 0% 98%; /* Text color for cards */
+    --card: 260 12% 14%; /* gray-900 */
+    --card-foreground: 253 47% 96%; /* gray-50 */
 
-    --popover: 240 3% 19%; /* Background for popovers */
-    --popover-foreground: 0 0% 98%; /* Text color for popovers */
+    --popover: 260 12% 14%; /* gray-900 */
+    --popover-foreground: 253 47% 96%; /* gray-50 */
 
-    --primary: 262 72% 70%; /* #A78BFA - Main purple accent */
-    --primary-foreground: 210 40% 98%; /* Text color for primary elements */
+    /* Brand colors */
+    --primary: 255 92% 76%; /* #A78BFA */
+    --primary-foreground: 253 47% 96%;
 
-    --secondary: 213 92% 67%; /* #5FA5F9 - Secondary blue accent */
-    --secondary-foreground: 210 40% 98%; /* Text color for secondary elements */
+    --secondary: 213 93% 67%; /* #5FA5F9 */
+    --secondary-foreground: 253 47% 96%;
 
-    --muted: 240 3% 22%; /* Muted backgrounds */
-    --muted-foreground: 240 5% 65%; /* Muted text color */
+    /* Supporting tones */
+    --muted: 253 9% 20%; /* gray-800 */
+    --muted-foreground: 267 12% 65%; /* gray-400 */
 
-    --accent: 240 3% 22%; /* Accent backgrounds */
-    --accent-foreground: 0 0% 98%; /* Accent text color */
+    --accent: 253 9% 20%; /* gray-800 */
+    --accent-foreground: 253 47% 96%;
 
-    --destructive: 0 62.8% 30.6%; /* Error or warning states */
-    --destructive-foreground: 0 0% 98%; /* Text on destructive elements */
+    /* State colors */
+    --destructive: 0 84% 60%; /* red-500 */
+    --destructive-foreground: 253 47% 96%;
 
-    --border: 240 3% 27%; /* Default border color */
-    --input: 240 3% 25%; /* Input border color */
-    --ring: 240 4.9% 83.9%; /* Focus ring color */
+    --success: 142 71% 45%; /* green-500 */
+    --success-foreground: 253 47% 96%;
 
-    --radius: 0.75rem; /* Default border radius */
+    --warning: 48 96% 53%; /* yellow-400 */
+    --warning-foreground: 253 47% 96%;
+
+    /* Forms & borders */
+    --border: 0 0% 25%; /* gray-700 */
+    --input: 255 4% 36%; /* gray-600 */
+    --ring: 253 16% 89%; /* gray-200 */
+
+    --radius: 0.75rem;
   }
 }
 
 @layer base {
   * {
-    @apply border-border; /* Apply default border color globally */
+    @apply border-border;
   }
   body {
-    @apply bg-background text-foreground; /* Set background and text color globally */
-  }
-  html,
-  body {
-    height: 100%;
-    overflow: hidden;
+    @apply bg-background text-foreground;
   }
 }
