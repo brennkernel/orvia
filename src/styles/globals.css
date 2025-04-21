@@ -3,6 +3,9 @@
 @tailwind utilities;
 
 @layer base {
+  /* ─────────────────────────────
+     Theme Tokens (Colors, Radius)
+  ───────────────────────────── */
   :root {
     /* Base gray palette (tinted with primary) */
     --background: 280 38% 6%; /* gray-950 */
@@ -14,21 +17,24 @@
     --popover: 260 12% 14%; /* gray-900 */
     --popover-foreground: 253 47% 96%; /* gray-50 */
 
-    /* Brand colors */
+    /* ─ Brand colors ─ */
     --primary: 255 92% 76%; /* #A78BFA */
     --primary-foreground: 253 47% 96%;
 
     --secondary: 213 93% 67%; /* #5FA5F9 */
     --secondary-foreground: 253 47% 96%;
 
-    /* Supporting tones */
+    /* ─ Supporting tones ─ */
     --muted: 253 9% 20%; /* gray-800 */
     --muted-foreground: 267 12% 65%; /* gray-400 */
 
     --accent: 253 9% 20%; /* gray-800 */
     --accent-foreground: 253 47% 96%;
 
-    /* State colors */
+    --badge-glow: 266 15% 70%;
+    --badge-glow-soft: 266 15% 70% / 60%;
+
+    /* ─ State colors ─ */
     --destructive: 0 84% 60%; /* red-500 */
     --destructive-foreground: 253 47% 96%;
 
@@ -38,7 +44,7 @@
     --warning: 48 96% 53%; /* yellow-400 */
     --warning-foreground: 253 47% 96%;
 
-    /* Forms & borders */
+    /* ─ UI tokens ─ */
     --border: 0 0% 25%; /* gray-700 */
     --input: 255 4% 36%; /* gray-600 */
     --ring: 253 16% 89%; /* gray-200 */
@@ -54,4 +60,74 @@
   body {
     @apply bg-background text-foreground;
   }
+}
+
+@layer components {
+  /* ─────────────────────────────
+     Badge glow component (legacy)
+  ───────────────────────────── */
+  .badge-glow {
+    @apply mb-3 flex items-center justify-center gap-2 sm:gap-1;
+  }
+
+  .badge-glow-line {
+    @apply h-px w-12;
+    background-image: linear-gradient(
+      to right,
+      hsl(var(--badge-glow)),
+      transparent
+    );
+  }
+
+  .badge-glow-line-left {
+    @apply h-px w-12;
+    background-image: linear-gradient(
+      to left,
+      hsl(var(--badge-glow)),
+      transparent
+    );
+  }
+
+  .badge-glow-icon {
+    @apply text-xs text-primary-foreground;
+  }
+
+  .badge-glow-text {
+    @apply bg-clip-text text-xs font-medium text-transparent;
+    background-image: linear-gradient(
+      to right,
+      hsl(var(--primary)),
+      hsl(var(--badge-glow)),
+      hsl(var(--badge-glow-soft))
+    );
+  }
+}
+
+/* ─────────────────────────────
+   Gradient animation for headline
+───────────────────────────── */
+@keyframes shimmer {
+  0% {
+    background-position: -200% 0;
+  }
+  70% {
+    background-position: 200% 0;
+  }
+  100% {
+    background-position: 200% 0;
+  }
+}
+
+.animated-headline {
+  @apply bg-[length:200%_auto] bg-clip-text text-transparent;
+  background-image: linear-gradient(
+    to right,
+    hsl(255 20% 90%),
+    hsl(255 30% 70%),
+    hsl(255 20% 85%),
+    hsl(255 35% 75%),
+    hsl(255 20% 90%)
+  );
+  animation: shimmer 8s linear infinite;
+  animation-delay: 0.8s;
 }

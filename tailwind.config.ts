@@ -49,6 +49,20 @@ export default {
         border: 'hsl(var(--border))',
         input: 'hsl(var(--input))',
         ring: 'hsl(var(--ring))',
+
+        gray: {
+          50: '#F3F1FA',
+          100: '#EFEDF5',
+          200: '#E0DEE7',
+          300: '#D4D4D4',
+          400: '#A49AB0',
+          500: '#77757E',
+          600: '#59575F',
+          700: '#404040',
+          800: '#302E37',
+          900: '#232029',
+          950: '#120A16',
+        },
       },
 
       keyframes: {
