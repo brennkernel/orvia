@@ -1,6 +1,6 @@
 import type { Metadata } from 'next'
 import Hero from '@/app/_components/waitlist/Hero'
-import Navigation from '@/app/_components/waitlist/NavigationWIP'
+import Navigation from '@/app/_components/waitlist/Navigation'
 
 export const metadata: Metadata = {
   title: 'Orvia — Smarter Forms for Notion',
