@@ -1,31 +1,133 @@
-# FormFlow
+# Orvia
 
-FormFlow es una integración que agrega lógica condicional y validación de campos a Notion Forms, optimizando la gestión de feedback para equipos técnicos y de producto
+A functional prototype exploring how authorized Notion database schemas can be transformed into adaptive form interfaces.
 
-## Cambio para probar el despliegue
+---
 
-## What's next? How do I make an app with this?
+## Overview
 
-We try to keep this project as simple as possible, so you can start with just the scaffolding we set up for you, and add additional things later when they become necessary.
+Orvia began as an exploration of extending Notion Forms without abandoning the simplicity of the native workflow.
 
-If you are not familiar with the different technologies used in this project, please refer to the respective docs. If you still are in the wind, please join our [Discord](https://t3.gg/discord) and ask for help.
+The original direction investigated conditional logic, validation layers, and structured feedback systems for technical teams.
 
-- [Next.js](https://nextjs.org)
-- [NextAuth.js](https://next-auth.js.org)
-- [Prisma](https://prisma.io)
-- [Drizzle](https://orm.drizzle.team)
-- [Tailwind CSS](https://tailwindcss.com)
-- [tRPC](https://trpc.io)
+The current prototype focuses on a broader technical question:
 
-## Learn More
+> How can external schemas become interfaces?
 
-To learn more about the [T3 Stack](https://create.t3.gg/), take a look at the following resources:
+Through OAuth authorization, schema retrieval, and dynamic rendering, the system generates editable form interfaces directly from existing Notion databases.
 
-- [Documentation](https://create.t3.gg/)
-- [Learn the T3 Stack](https://create.t3.gg/en/faq#what-learning-resources-are-currently-available) — Check out these awesome tutorials
+---
 
-You can check out the [create-t3-app GitHub repository](https://github.com/t3-oss/create-t3-app) — your feedback and contributions are welcome!
+## What Works
 
-## How do I deploy this?
+- Notion OAuth authentication
+- Workspace authorization
+- Protected dashboard
+- Dynamic database listing
+- Schema retrieval from Notion
+- Schema interpretation
+- Dynamic field rendering
+- Editor / Preview interface
+- Session persistence
 
-Follow our deployment guides for [Vercel](https://create.t3.gg/en/deployment/vercel), [Netlify](https://create.t3.gg/en/deployment/netlify) and [Docker](https://create.t3.gg/en/deployment/docker) for more information.
+---
+
+## Not Implemented
+
+- Public form publishing
+- Submission pipeline
+- Response synchronization
+- Validation-rule engine
+- Conditional logic execution
+- Persistent form configurations
+
+---
+
+## Architecture
+
+### Frontend
+
+- Next.js
+- React
+- Tailwind CSS
+
+### Logic Layer
+
+- TypeScript
+- tRPC
+- Zod
+
+### Persistence
+
+- Supabase
+- PostgreSQL
+- Prisma
+
+### Integration
+
+- Notion API
+- OAuth 2.0
+
+### Deployment
+
+- Vercel
+
+---
+
+## Technical Investigation
+
+The project investigates how external schemas can be interpreted and transformed into adaptive interfaces.
+
+Particular attention was given to:
+
+- OAuth authorization flows
+- Dynamic schema interpretation
+- Runtime UI generation
+- External API constraints
+- Product-oriented architecture
+
+---
+
+## Key Technical Questions
+
+The project explored several technical questions:
+
+- How can external database schemas become interfaces?
+- How can OAuth permissions be translated into application state?
+- How can dynamic field structures be rendered at runtime?
+- How can validation and conditional logic be layered on top of an existing ecosystem without replacing it?
+
+---
+
+## Live Prototype
+
+https://orvia.vercel.app
+
+---
+
+## Current Status
+
+Functional Prototype
+
+The project reached a working architectural state but was never developed into a complete SaaS product.
+
+Today, Orvia is preserved as a technical artifact and research prototype documenting an investigation into schema-driven interfaces, OAuth-based integrations, and dynamic UI generation within the Notion ecosystem.
+
+---
+
+## Local Development
+
+```bash
+npm install
+npm run dev
+```
+
+Required services:
+
+- Notion OAuth Application
+- Supabase Database
+- Environment Variables
+
+```
+
+```

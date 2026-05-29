@@ -1,9 +1,9 @@
 import { auth } from '@/server/auth/config'
 import { redirect } from 'next/navigation'
 import { api } from '@/trpc/server'
+
 import SignOutButton from '@/app/_components/SignOutButton'
-import Link from 'next/link'
-import { Button } from '@/components/ui/button'
+import { LoadingNavigationButton } from '@/components/ui/loading-nav-button'
 
 export default async function DashboardPage() {
   const session = await auth()
@@ -13,29 +13,29 @@ export default async function DashboardPage() {
   }
 
   const authStatus = await api.users.getAuthStatus()
+  const displayName = session.user?.name ?? authStatus.email ?? 'there'
 
   return (
-    <div className="container mx-auto py-8">
-      {/* Header */}
+    <main className="container mx-auto px-4 py-8">
       <div className="mb-6 flex items-center justify-between">
         <div>
           <h1 className="text-3xl font-bold">Dashboard</h1>
-          <p className="text-gray-500">Welcome, {authStatus.email}!</p>
+          <p className="text-gray-500">Welcome, {displayName}!</p>
         </div>
         <div className="flex gap-4">
-          <Link href="/forms/create">
-            <Button>Create New Form</Button>
-          </Link>
+          <LoadingNavigationButton href="/forms/create">
+            Select Database
+          </LoadingNavigationButton>
+
           <SignOutButton />
         </div>
       </div>
 
-      {/* Placeholder for future form list */}
       <div className="mt-8 rounded-lg border bg-gray-50 p-6">
         <p className="text-center text-gray-500">
-          You don’t have any forms yet. Click "Create New Form" to get started.
+          Select an authorized Notion database to begin exploring the prototype.
         </p>
       </div>
-    </div>
+    </main>
   )
 }

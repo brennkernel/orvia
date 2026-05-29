@@ -6,9 +6,10 @@ import { type Metadata } from 'next'
 import { TRPCReactProvider } from '@/trpc/react'
 
 export const metadata: Metadata = {
-  title: 'Orvia — Smarter Forms for Notion',
+  title: 'Orvia — Notion Form Prototype',
   description:
-    'Orvia lets you show or hide fields, validate responses, and ensure cleaner, more complete form submissions — without breaking your Notion flow.',
+    'A prototype exploring how Notion database schemas can be transformed into adaptive form interfaces through OAuth authorization, schema interpretation, and dynamic UI generation.',
+
   icons: [{ rel: 'icon', url: '/favicon.ico' }],
 }
 

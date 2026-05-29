@@ -81,7 +81,7 @@ export function FormEditor({ initialData }: FormEditorProps) {
   if (!initialData) {
     return (
       <div className="p-8 text-center">
-        <p className="text-muted-foreground">No form data available</p>
+        <p className="text-muted-foreground">No form schema available</p>
       </div>
     )
   }
@@ -126,14 +126,16 @@ export function FormEditor({ initialData }: FormEditorProps) {
             {isSubmitted ? (
               <div className="space-y-6 text-left">
                 <h2 className="text-xl font-semibold text-foreground">
-                  Thanks! Your response has been saved.
+                  Preview complete :-)
                 </h2>
                 <p className="text-muted-foreground">
-                  This form is connected to your Notion database. You can
-                  preview how data is collected and stored.
+                  This prototype renders fields from a Notion database schema
+                  and simulates the form interaction flow. Responses are not
+                  saved or synced back to Notion in this demo.
                 </p>
+
                 <p className="text-sm text-muted-foreground">
-                  Want to try again? Just hit the restart button above.
+                  Want to try again? Use the restart button above.
                 </p>
               </div>
             ) : (
@@ -161,7 +163,7 @@ export function FormEditor({ initialData }: FormEditorProps) {
                       Submit
                     </Button>
                     <div className="mt-3 text-xs text-muted-foreground">
-                      Powered by FormFlow
+                      Powered by Orvia
                     </div>
                   </div>
                 </div>

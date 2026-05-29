@@ -58,7 +58,7 @@ export function EditorNavbar({ formTitle }: EditorNavbarProps) {
           className="gap-1.5 rounded-sm border-none bg-primary text-sm font-medium text-white shadow-md transition-all hover:shadow-lg"
         >
           <Sparkles className="h-3.5 w-3.5" />
-          Publish Form
+          Run Preview
         </Button>
       </div>
     </header>

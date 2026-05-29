@@ -3,7 +3,6 @@
 import { useRouter } from 'next/navigation'
 import { useState, useCallback, useMemo } from 'react'
 import Image from 'next/image'
-import { Button } from '@/components/ui/button'
 import {
   Card,
   CardContent,
@@ -13,7 +12,8 @@ import {
   CardTitle,
 } from '@/components/ui/card'
 import { Input } from '@/components/ui/input'
-import { Search, Check, Loader2 } from 'lucide-react'
+import { Search, Check } from 'lucide-react'
+import { LoadingButton } from '@/components/ui/loading-button'
 import { NotionIcon } from '@/app/_components/notion/NotionIcon'
 
 // Define the structure of a Notion database
@@ -70,8 +70,8 @@ export function NotionDatabaseSelector({
             Notion Database
           </CardTitle>
           <CardDescription>
-            Choose a database to apply logic and validations to your form
-            responses.
+            Choose an authorized database to generate a dynamic editor and
+            preview interface.
           </CardDescription>
         </CardHeader>
 
@@ -101,20 +101,14 @@ export function NotionDatabaseSelector({
 
         <CardFooter className="border-t border-border/20 bg-card/80 p-4">
           {/* Continue button, disabled until a database is selected */}
-          <Button
+          <LoadingButton
             className="w-full"
-            disabled={!selectedDatabaseId || isNavigating}
+            disabled={!selectedDatabaseId}
+            isLoading={isNavigating}
             onClick={handleContinue}
           >
-            {isNavigating ? (
-              <>
-                <Loader2 className="mr-2 h-4 w-4 animate-spin" />
-                Loading...
-              </>
-            ) : (
-              'Continue'
-            )}
-          </Button>
+            Continue
+          </LoadingButton>
         </CardFooter>
       </Card>
     </div>
