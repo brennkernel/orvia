@@ -129,5 +129,3 @@ Required services:
 - Environment Variables
 
 ```
-
-```
